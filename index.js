@@ -1,8 +1,14 @@
-const express = require('express')
+const express = require('express');
+const cors = require('cors'); // นำเข้า cors
 const app = express();
-app.use(express.json());
-const { readdirSync } = require('fs')
-readdirSync('./Routes')
-    .map((r) => app.use(require('./Routes/' + r)))
 
-app.listen(3000, () => console.log('Server is Running 3000'))
+app.use(cors()); // ตั้งค่า CORS ให้รองรับ request จากทุกโดเมน
+app.use(express.json()); // ใช้ express.json() เพื่อรองรับข้อมูล JSON
+
+const { readdirSync } = require('fs');
+
+// อ่านไฟล์ทั้งหมดในโฟลเดอร์ Routes และใช้เส้นทาง
+readdirSync('./Routes')
+    .map((r) => app.use(require('./Routes/' + r))); // โหลดเส้นทางแต่ละไฟล์
+
+app.listen(3000, () => console.log('Server is Running on port 3000'));
